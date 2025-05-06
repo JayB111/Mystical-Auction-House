@@ -92,15 +92,7 @@ AuctionAPI/
 
 ---
 
-## Future Ideas (not yet added)
 
-* Dark Mode Moon Phase Switch — toggles site between "New Moon" and "Full Moon"
-* Magic Trick Bidding — sometimes your bid mysteriously fails and the item disappears
-* Time Freeze Mode — users can pause all countdowns as if casting a spell
-* Wish System — users can make a wish; the system whispers if it may come true
-* Per-item magical sound effects when bidding on specific artifacts
-
----
 
 ## Special Thanks
 

@@ -3,7 +3,6 @@ import axios from "axios";
 import "./MysticalAuctionHouse.css";
 import * as signalR from "@microsoft/signalr";
 
-
 const coinSound = new Audio("/sounds/coin-sound.mp3");
 
 function formatTimeLeft(endTime, now) {
@@ -20,21 +19,17 @@ export default function MysticalAuctionHouse() {
   const [mythosBalance, setMythosBalance] = useState(1500);
   const [now, setNow] = useState(new Date());
   const ambientRef = useRef(null);
-  const [bidAnimation, setBidAnimation] = useState(null);
 
-
-  // Timer that updates every second
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch products and assign each a fake end time
   useEffect(() => {
     axios.get("https://localhost:5001/api/products")
       .then(res => {
         const withFakeTimes = res.data.map(product => {
-          const randomMinutes = Math.floor(Math.random() * 10) + 5; // 5–15 minutes
+          const randomMinutes = Math.floor(Math.random() * 10) + 5;
           const fakeEnd = new Date(Date.now() + randomMinutes * 60000);
           return { ...product, fakeEndTime: fakeEnd };
         });
@@ -48,13 +43,13 @@ export default function MysticalAuctionHouse() {
       .withUrl("https://localhost:5001/bidhub")
       .withAutomaticReconnect()
       .build();
-  
+
     connection.start()
       .then(() => {
-        console.log("🔌 SignalR connected to bidhub");
-  
+        console.log("SignalR connected to bidhub");
+
         connection.on("BidPlaced", () => {
-          console.log(" BidPlaced received! Refreshing products...");
+          console.log("BidPlaced received! Refreshing products...");
           axios.get("https://localhost:5001/api/products")
             .then(res => {
               const withFakeTimes = res.data.map(product => {
@@ -67,12 +62,11 @@ export default function MysticalAuctionHouse() {
         });
       })
       .catch(err => console.error("SignalR connection failed:", err));
-  
+
     return () => {
       connection.stop();
     };
   }, []);
-  
 
   const handleBid = (id) => {
     coinSound.play();
@@ -85,7 +79,6 @@ export default function MysticalAuctionHouse() {
         return axios.get("https://localhost:5001/api/products");
       })
       .then(res => {
-        // Reapply fakeEndTime to each updated product
         const withFakeTimes = res.data.map(product => {
           const randomMinutes = Math.floor(Math.random() * 10) + 5;
           const fakeEnd = new Date(Date.now() + randomMinutes * 60000);
@@ -125,60 +118,72 @@ export default function MysticalAuctionHouse() {
       </button>
 
       <div className="mythos-counter">
-        You have You have <span className="mythos-symbol">ɱ</span> {mythosBalance}
-
+        You have <span className="mythos-symbol">ɱ</span> {mythosBalance}
       </div>
 
       <header className="auction-header">
-      <h1 className="glowing-title">Mystical Auction House</h1>
-
+        <h1 className="glowing-title">Mystical Auction House</h1>
         <p className="intro">
           Step into the Mystical Auction House — where enchanted artifacts, divine relics, and ancient curses await new owners. Only those with courage and Mythos may claim the legends.
         </p>
         <p className="currency-note">
-  All items are sold using <span className="mythos-symbol">ɱ</span> (Mythos), the currency of gods, spirits, and seekers of power.
-</p>
-
+          All items are sold using <span className="mythos-symbol">ɱ</span> (Mythos), the currency of gods, spirits, and seekers of power.
+        </p>
       </header>
 
       <div className="product-grid">
-        {products.map(product => (
-          <div
-            key={product.id}
-            className={`auction-item ${
-              [
-                "The Coin of Forgotten Realms",
-                "The Widow’s Veil",
-                "The Lantern of the Deep Moon",
-                "The Atlas of Lost Stars",
-                "Tarot of the Veiled Realms",
-                "The Thread of Tyron",
-                "Zeus' Lightning Bolt",
-                "True Love’s Kiss"
-              ].includes(product.name) ? "glow" : ""
-            }`}
-          >
-            <img src={`/images/${product.imageFileName}`} alt={product.name} />
-            <h2>{product.name}</h2>
-            <p>{product.description}</p>
+  {products.map(product => {
+    const isAuctionEnded = new Date(product.fakeEndTime) - now <= 0;
 
-            <p className="countdown">
-  {new Date(product.fakeEndTime) - now <= 0
-    ? "Auction Ended"
-    : `Ends in: ${formatTimeLeft(product.fakeEndTime, now)}`}
-</p>
+    return (
+      <div
+        key={product.id}
+        className={`auction-item ${
+          [
+            "The Coin of Forgotten Realms",
+            "The Widow’s Veil",
+            "The Lantern of the Deep Moon",
+            "The Atlas of Lost Stars",
+            "Tarot of the Veiled Realms",
+            "The Thread of Tyron",
+            "Zeus' Lightning Bolt",
+            "True Love’s Kiss"
+          ].includes(product.name) ? "glow" : ""
+        }`}
+      >
+        <img src={`/images/${product.imageFileName}`} alt={product.name} />
+        <h2>{product.name}</h2>
+        <p>{product.description}</p>
 
+        {isAuctionEnded ? (
+          <p className="countdown relic-claimed">
+          “This relic has been claimed by forces unseen.”
+        </p>
+        
+        ) : (
+          <p className="countdown">Ends in: {formatTimeLeft(product.fakeEndTime, now)}</p>
+        )}
 
-            <p className="price">
-              Current bid: {product.currentPrice > 0 ? product.currentPrice : product.startingPrice}ɱ
-            </p>
+        <p className="price">
+          Current bid: {product.currentPrice > 0 ? product.currentPrice : product.startingPrice}ɱ
+        </p>
 
-            <button className="bid-button" onClick={() => handleBid(product.id)}>
-              Place Bid
-            </button>
-          </div>
-        ))}
+        <p className="bid-count">Total Bids: {product.bidCount}</p>
+
+        {isAuctionEnded ? (
+          <button className="bid-button disabled" disabled>
+            Bidding Closed
+          </button>
+        ) : (
+          <button className="bid-button" onClick={() => handleBid(product.id)}>
+            Place Bid
+          </button>
+        )}
       </div>
+    );
+  })}
+</div>
+
     </div>
   );
 }

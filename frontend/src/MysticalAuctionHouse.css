@@ -18,7 +18,8 @@
     text-shadow: 0 0 12px #7e22ce;
   }
   
-  .intro, .currency-note {
+  .intro,
+  .currency-note {
     font-size: 1.1rem;
     max-width: 700px;
     margin: 0.5rem auto;
@@ -35,7 +36,6 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
-
   }
   
   .auction-item {
@@ -76,6 +76,18 @@
     color: #c084fc;
   }
   
+  .countdown {
+    font-size: 0.9rem;
+    color: #ffc0cb;
+    margin: 0.5rem 0;
+    font-style: italic;
+  }
+  
+  .bid-count {
+    font-size: 0.9rem;
+    color: #e0d2ff;
+  }
+  
   .bid-button {
     background: linear-gradient(145deg, #7f5af0, #6241c9);
     color: #fff;
@@ -93,6 +105,14 @@
   .bid-button:hover {
     transform: scale(1.05);
     box-shadow: 0 0 20px #d1c3ff;
+  }
+  
+  .bid-button.disabled {
+    background-color: #444;
+    color: #aaa;
+    cursor: not-allowed;
+    box-shadow: none;
+    border: 1px solid #666;
   }
   
   .ambient-toggle {
@@ -113,6 +133,108 @@
   
   .ambient-toggle:hover {
     background-color: #3c3247;
+  }
+  
+  .mythos-counter {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    background-color: rgba(28, 18, 36, 0.85);
+    color: #e2d3ff;
+    font-family: "Cinzel", serif;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #8855cc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(200, 155, 255, 0.4);
+    z-index: 100;
+    animation: fadeIn 1s ease forwards;
+  }
+  
+  .mythos-value {
+    font-weight: bold;
+    color: #cc99ff;
+  }
+  
+  .mythos-symbol {
+    color: #f0c0ff;
+    font-weight: bold;
+    text-shadow:
+      0 0 6px #cc66ff,
+      0 0 12px #b14dff,
+      0 0 20px #9900ff;
+    animation: mythosGlow 2.5s ease-in-out infinite;
+  }
+  
+  @keyframes mythosGlow {
+    0%, 100% {
+      text-shadow: 0 0 6px #cc66ff, 0 0 12px #b14dff, 0 0 20px #9900ff;
+    }
+    50% {
+      text-shadow: 0 0 3px #cc66ff, 0 0 6px #b14dff, 0 0 10px #9900ff;
+    }
+  }
+  
+  .relic-claimed {
+    color: #d7b5ff;
+    font-style: italic;
+    font-weight: bold;
+    text-shadow: 0 0 6px #b07fff, 0 0 12px #b07fff;
+    animation: shimmer 2s ease-in-out infinite;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      opacity: 0.8;
+      text-shadow: 0 0 4px #b07fff;
+    }
+    50% {
+      opacity: 1;
+      text-shadow: 0 0 8px #c89ff9, 0 0 16px #c89ff9;
+    }
+    100% {
+      opacity: 0.8;
+      text-shadow: 0 0 4px #b07fff;
+    }
+  }
+  
+  .glow {
+    box-shadow: 0 0 15px rgba(185, 129, 255, 0.6);
+    animation: glowPulse 2.5s ease-in-out infinite;
+    border-radius: 10px;
+  }
+  
+  @keyframes glowPulse {
+    0%, 100% {
+      box-shadow: 0 0 12px rgba(185, 129, 255, 0.6);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(200, 155, 255, 0.9);
+    }
+  }
+  
+  .glowing-title {
+    color: #e7cfff;
+    text-shadow:
+      0 0 10px #c080ff,
+      0 0 20px #c080ff,
+      0 0 40px #a64dff;
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+  
+  @keyframes pulseGlow {
+    0%, 100% {
+      text-shadow:
+        0 0 10px #c080ff,
+        0 0 20px #c080ff,
+        0 0 40px #a64dff;
+    }
+    50% {
+      text-shadow:
+        0 0 5px #c080ff,
+        0 0 10px #c080ff,
+        0 0 20px #a64dff;
+    }
   }
   
   .sparkle-overlay {
@@ -156,7 +278,7 @@
       opacity: 0;
     }
   }
-
+  
   .curtain-container {
     position: fixed;
     top: 0;
@@ -178,12 +300,10 @@
   
   .left-curtain {
     transform-origin: left;
-    animation-delay: 0s;
   }
   
   .right-curtain {
     transform-origin: right;
-    animation-delay: 0s;
   }
   
   @keyframes openCurtain {
@@ -195,120 +315,5 @@
     }
   }
   
-  .glow {
-    box-shadow: 0 0 15px rgba(185, 129, 255, 0.6);
-    animation: glowPulse 2.5s ease-in-out infinite;
-    border-radius: 10px;
-  }
   
-  @keyframes glowPulse {
-    0%, 100% {
-      box-shadow: 0 0 12px rgba(185, 129, 255, 0.6);
-    }
-    50% {
-      box-shadow: 0 0 20px rgba(200, 155, 255, 0.9);
-    }
-  }
-  .mythos-counter {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    background-color: rgba(28, 18, 36, 0.85);
-    color: #e2d3ff;
-    font-family: "Cinzel", serif;
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid #8855cc;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(200, 155, 255, 0.4);
-    z-index: 100;
-    animation: fadeIn 1s ease forwards;
-  }
-  
-  .mythos-value {
-    font-weight: bold;
-    color: #cc99ff;
-  }
-  .countdown {
-    font-style: italic;
-    color: #ffcccc;
-    margin-bottom: 0.5rem;
-  }
-  .countdown {
-  font-size: 0.9rem;
-  color: #ffc0cb;
-  margin: 0.5rem 0;
-  font-style: italic;
-}
-.glowing-title {
-    color: #e7cfff;
-    text-shadow:
-      0 0 10px #c080ff,
-      0 0 20px #c080ff,
-      0 0 40px #a64dff;
-    animation: pulseGlow 3s ease-in-out infinite;
-  }
-  
-  @keyframes pulseGlow {
-    0%, 100% {
-      text-shadow:
-        0 0 10px #c080ff,
-        0 0 20px #c080ff,
-        0 0 40px #a64dff;
-    }
-    50% {
-      text-shadow:
-        0 0 5px #c080ff,
-        0 0 10px #c080ff,
-        0 0 20px #a64dff;
-    }
-  }
-  .mythos-symbol {
-    color: #f0c0ff;
-    font-weight: bold;
-    text-shadow:
-      0 0 6px #cc66ff,
-      0 0 12px #b14dff,
-      0 0 20px #9900ff;
-    animation: mythosGlow 2.5s ease-in-out infinite;
-  }
-  
-  @keyframes mythosGlow {
-    0%, 100% {
-      text-shadow:
-        0 0 6px #cc66ff,
-        0 0 12px #b14dff,
-        0 0 20px #9900ff;
-    }
-    50% {
-      text-shadow:
-        0 0 3px #cc66ff,
-        0 0 6px #b14dff,
-        0 0 10px #9900ff;
-    }
-  }
-  .mythos-symbol {
-    color: #f0c0ff;
-    font-weight: bold;
-    text-shadow:
-      0 0 6px #cc66ff,
-      0 0 12px #b14dff,
-      0 0 20px #9900ff;
-    animation: mythosGlow 2.5s ease-in-out infinite;
-  }
-  
-  @keyframes mythosGlow {
-    0%, 100% {
-      text-shadow:
-        0 0 6px #cc66ff,
-        0 0 12px #b14dff,
-        0 0 20px #9900ff;
-    }
-    50% {
-      text-shadow:
-        0 0 3px #cc66ff,
-        0 0 6px #b14dff,
-        0 0 10px #9900ff;
-    }
-  }
   

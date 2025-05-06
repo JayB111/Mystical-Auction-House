@@ -98,6 +98,7 @@ namespace AuctionAPI.Controllers
             {
                 product.CurrentPrice += bidAmount;
             }
+            product.BidCount += 1;
 
             _context.SaveChanges();
 
