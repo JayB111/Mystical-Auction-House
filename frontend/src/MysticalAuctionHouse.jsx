@@ -3,7 +3,8 @@ import axios from "axios";
 import "./MysticalAuctionHouse.css";
 import * as signalR from "@microsoft/signalr";
 
-const coinSound = new Audio("/sounds/coin-sound.mp3");
+const coinSound = new Audio(`${import.meta.env.BASE_URL}sounds/coin-sound.mp3`);
+
 
 function formatTimeLeft(endTime, now) {
   const end = new Date(endTime);
@@ -26,17 +27,74 @@ export default function MysticalAuctionHouse() {
   }, []);
 
   useEffect(() => {
-    axios.get("https://localhost:5001/api/products")
-      .then(res => {
-        const withFakeTimes = res.data.map(product => {
-          const randomMinutes = Math.floor(Math.random() * 10) + 5;
-          const fakeEnd = new Date(Date.now() + randomMinutes * 60000);
-          return { ...product, fakeEndTime: fakeEnd };
-        });
-        setProducts(withFakeTimes);
-      })
-      .catch(err => console.error("Failed to load products", err));
+    const isGitHubPages = window.location.hostname.includes("github.io");
+  
+    if (isGitHubPages) {
+      // mock items on GitHub Pages
+      const mockProducts = [
+        {
+          id: 1,
+          name: "The Thread of Tyron",
+          description: "A silver thread spun by unknown gods. Said to lead lost souls through forgotten paths.",
+          imageFileName: "Thread of tyron.jpg",
+          startingPrice: 220,
+          currentPrice: 270,
+          bidCount: 5,
+        },
+        {
+          id: 2,
+          name: "The Thirteenth Hour Sandglass",
+          description: "A cursed hourglass that counts a hidden hour no one sees. Time rewinds for those who dare flip it.",
+          imageFileName: "The Thirteenth Hour Sandglass.jpg",
+          startingPrice: 150,
+          currentPrice: 190,
+          bidCount: 4,
+        },
+        {
+          id: 3,
+          name: "Oracle's Dice",
+          description: "Ancient dice used to divine fate. Each face reveals a different destiny.",
+          imageFileName: "Oracle's Dice.jpg",
+          startingPrice: 180,
+          currentPrice: 210,
+          bidCount: 3,
+        },
+        {
+          id: 4,
+          name: "Pandora's Box",
+          description: "A beautifully ornate box said to contain all the evils of the world. Opening it released sorrow... and hope.",
+          imageFileName: "pandoras box.jpg",
+          startingPrice: 250,
+          currentPrice: 300,
+          bidCount: 6,
+        }
+      ];
+      
+  
+      // Add fake end times      
+  
+      const withFakeTimes = mockProducts.map(product => {
+        const randomMinutes = Math.floor(Math.random() * 10) + 5;
+        const fakeEnd = new Date(Date.now() + randomMinutes * 60000);
+        return { ...product, fakeEndTime: fakeEnd };
+      });
+  
+      setProducts(withFakeTimes);
+    } else {
+      // Use real API when running locally
+      axios.get("https://localhost:5001/api/products")
+        .then(res => {
+          const withFakeTimes = res.data.map(product => {
+            const randomMinutes = Math.floor(Math.random() * 10) + 5;
+            const fakeEnd = new Date(Date.now() + randomMinutes * 60000);
+            return { ...product, fakeEndTime: fakeEnd };
+          });
+          setProducts(withFakeTimes);
+        })
+        .catch(err => console.error("Failed to load products", err));
+    }
   }, []);
+  
 
   useEffect(() => {
     const connection = new signalR.HubConnectionBuilder()
@@ -112,7 +170,8 @@ export default function MysticalAuctionHouse() {
 
       <div className="sparkle-overlay"></div>
 
-      <audio ref={ambientRef} src="/sounds/ambient-loop.mp3" loop />
+      <audio ref={ambientRef} src={`${import.meta.env.BASE_URL}sounds/ambient-loop.mp3`} loop />
+
       <button className="bid-button ambient-toggle" onClick={toggleAmbient}>
         {isAmbientPlaying ? "Pause Ambience" : "Play Ambience"}
       </button>
@@ -126,6 +185,8 @@ export default function MysticalAuctionHouse() {
         <p className="intro">
           Step into the Mystical Auction House — where enchanted artifacts, divine relics, and ancient curses await new owners. Only those with courage and Mythos may claim the legends.
         </p>
+        
+
         <p className="currency-note">
           All items are sold using <span className="mythos-symbol">ɱ</span> (Mythos), the currency of gods, spirits, and seekers of power.
         </p>
@@ -151,7 +212,8 @@ export default function MysticalAuctionHouse() {
           ].includes(product.name) ? "glow" : ""
         }`}
       >
-        <img src={`/images/${product.imageFileName}`} alt={product.name} />
+        <img src={`${import.meta.env.BASE_URL}images/${product.imageFileName}`} alt={product.name} />
+
         <h2>{product.name}</h2>
         <p>{product.description}</p>
 

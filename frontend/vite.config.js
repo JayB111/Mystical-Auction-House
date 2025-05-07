@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import mkcert from 'vite-plugin-mkcert'
 
 export default defineConfig({
+  base: '/Mystical-Auction-House/',
   plugins: [react(), mkcert()],
   server: {
     https: true,

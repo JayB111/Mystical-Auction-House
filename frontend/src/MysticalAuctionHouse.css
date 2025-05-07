@@ -37,6 +37,15 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
   }
+
+  @media (max-width: 768px) {
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  
+  
   
   .auction-item {
     background: #2d1f3b;
