@@ -4,6 +4,7 @@ import "./MysticalAuctionHouse.css";
 import * as signalR from "@microsoft/signalr";
 
 const coinSound = new Audio(`${import.meta.env.BASE_URL}sounds/coin-sound.mp3`);
+const apiBaseUrl = import.meta.env.VITE_API_URL;
 
 
 function formatTimeLeft(endTime, now) {
@@ -82,7 +83,10 @@ export default function MysticalAuctionHouse() {
       setProducts(withFakeTimes);
     } else {
       // Use real API when running locally
-      axios.get("https://localhost:5001/api/products")
+      const apiBaseUrl = import.meta.env.VITE_API_URL;
+axios.get(`${apiBaseUrl}/api/products`)
+
+
         .then(res => {
           const withFakeTimes = res.data.map(product => {
             const randomMinutes = Math.floor(Math.random() * 10) + 5;
@@ -98,7 +102,8 @@ export default function MysticalAuctionHouse() {
 
   useEffect(() => {
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:5001/bidhub")
+    .withUrl(`${apiBaseUrl}/bidhub`)
+
       .withAutomaticReconnect()
       .build();
 
@@ -131,7 +136,8 @@ export default function MysticalAuctionHouse() {
     const item = products.find(p => p.id === id);
     const bidAmount = item ? Math.max(1, Math.floor(item.startingPrice * 0.1)) : 0;
 
-    axios.put(`https://localhost:5001/api/products/${id}/bid`)
+    axios.put(`${apiBaseUrl}/api/products/${id}/bid`)
+
       .then(() => {
         setMythosBalance(prev => Math.max(0, prev - bidAmount));
         return axios.get("https://localhost:5001/api/products");
