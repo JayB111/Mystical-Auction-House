@@ -6,9 +6,10 @@ EXPOSE 80
 # Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY . .
-RUN dotnet restore "./AuctionAPI.csproj"
-RUN dotnet publish "./AuctionAPI.csproj" -c Release -o /app/publish
+COPY ./backend/ ./backend/
+WORKDIR /src/backend
+RUN dotnet restore "AuctionAPI.csproj"
+RUN dotnet publish "AuctionAPI.csproj" -c Release -o /app/publish
 
 # Final stage
 FROM base AS final
