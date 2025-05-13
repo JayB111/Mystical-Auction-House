@@ -107,3 +107,4 @@ C:\Users\jaylj\source\repos\TobiasLearningMethods\AuctionAPI\backend\obj\Debug\n
 C:\Users\jaylj\source\repos\TobiasLearningMethods\AuctionAPI\backend\obj\Debug\net9.0\backend.genruntimeconfig.cache
 C:\Users\jaylj\source\repos\TobiasLearningMethods\AuctionAPI\backend\obj\Debug\net9.0\ref\backend.dll
 C:\Users\jaylj\source\repos\TobiasLearningMethods\AuctionAPI\backend\obj\Debug\net9.0\backend.sourcelink.json
+C:\Users\jaylj\source\repos\TobiasLearningMethods\AuctionAPI\backend\bin\Debug\net9.0\vercel.json
